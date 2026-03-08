@@ -14,7 +14,7 @@ function setupSocketServer(httpServer) {
 
     const io = new Server(httpServer, {
         cors: {
-            origin: "https://karmanai.onrender.com",
+            origin: "http://localhost:5173",
             methods: ["GET", "POST"],
             credentials: true
         },
@@ -42,6 +42,8 @@ function setupSocketServer(httpServer) {
     });
 
     io.on("connection", (socket) => {
+
+        console.log("User connected", socket.id);
 
         socket.on("ai-message", async ({ chatId, message }) => {
             if (!message || !chatId) {
