@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowRight, Mail, Lock, User } from 'lucide-react';
 import StarBorder from '../components/StarBorder';
 import RocketToggleIcon from '../components/RocketToggleIcon';
+import { useRegister } from '../hooks/useAuth';
 
 export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -17,10 +18,12 @@ export default function RegisterPage() {
 
     const password = watch('password');
 
+    const { mutate: Register } = useRegister();
+
     const onSubmit = async (data) => {
         // Simulate API call
-        console.log('Register Data:', data);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const { username, email, password } = data;
+        Register({ username, email, password });
     };
 
     return (

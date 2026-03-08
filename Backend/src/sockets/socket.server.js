@@ -43,10 +43,6 @@ function setupSocketServer(httpServer) {
 
     io.on("connection", (socket) => {
 
-        
-
-        console.log("User connected", socket.user);
-
         socket.on("ai-message", async ({ chatId, message }) => {
             if (!message || !chatId) {
                 return socket.emit("ai-error", { error: "Invalid input parameters" });
