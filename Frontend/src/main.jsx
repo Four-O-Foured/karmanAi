@@ -16,10 +16,10 @@ const queryClient = new QueryClient({
 })
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+<StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={tanstackRouter} context={{ queryClient }} />
       <Toaster position="top-center" reverseOrder={false} />
     </QueryClientProvider>
-  </StrictMode>,
+</StrictMode>,
 )
