@@ -10,7 +10,9 @@ const ChatPage = () => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        const Socket = io('http://localhost:3000', {
+        const socketUrl = 'https://karmanai.onrender.com'
+
+        const Socket = io(socketUrl, {
             withCredentials: true,
         });
         setSocket(Socket);

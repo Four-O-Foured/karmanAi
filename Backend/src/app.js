@@ -12,7 +12,24 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "https://karmanai.onrender.com", credentials: true }));
+
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://karmanai.onrender.com",
+    "https://karmanai.onrender.com/" // sometimes trailing slash causes issues
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
+
 app.use(cookieParser());
 
 app.use("/api/auth", userRoutes);

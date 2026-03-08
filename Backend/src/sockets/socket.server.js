@@ -12,9 +12,14 @@ import { getChatHistory } from "../DAO/message.dao.js";
 function setupSocketServer(httpServer) {
     const activeChats = new Set();
 
+    const allowedOrigins = [
+        "http://localhost:5173",
+        "https://karmanai.onrender.com"
+    ];
+
     const io = new Server(httpServer, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: allowedOrigins,
             methods: ["GET", "POST"],
             credentials: true
         },
