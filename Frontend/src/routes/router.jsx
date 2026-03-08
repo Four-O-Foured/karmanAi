@@ -1,9 +1,5 @@
-import { createRootRouteWithContext, createRoute, Router, redirect } from '@tanstack/react-router'
+import { createRootRouteWithContext, createRoute, Router, redirect, lazyRouteComponent } from '@tanstack/react-router'
 import App from '../App'
-import LandingPage from '../pages/LandingPage'
-import ChatPage from '../pages/ChatPage'
-import LoginPage from '../pages/LoginPage'
-import RegisterPage from '../pages/RegisterPage'
 import { authQueryOptions } from '../hooks/useAuth'
 import customToast from '../utils/toast'
 import { chatsQueryOptions } from '../hooks/useChats'
@@ -21,13 +17,13 @@ export const rootRoute = createRootRouteWithContext()({
 export const indexRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/',
-    component: LandingPage,
+    component: lazyRouteComponent(() => import('../pages/LandingPage')),
 })
 
 export const chatRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/chat/$chatId',
-    component: ChatPage,
+    component: lazyRouteComponent(() => import('../pages/ChatPage')),
     beforeLoad: async ({ context: { session } }) => {
         if (!session) {
             customToast.error('Login to continue');
@@ -59,15 +55,17 @@ export const chatIndexRoute = createRoute({
         }
     },
     // If no chats, we can still show the page with a "New Chat" state or handled by component
-    component: ChatPage,
+    component: lazyRouteComponent(() => import('../pages/ChatPage')),
 })
 
 export const loginRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/login',
-    component: LoginPage,
+    component: lazyRouteComponent(() => import('../pages/LoginPage')),
     beforeLoad: ({ context: { session } }) => {
-        if (session) {
+        if (!session) {
+            // we let them stay
+        } else {
             throw redirect({ to: '/chat' })
         }
     }
@@ -76,9 +74,11 @@ export const loginRoute = createRoute({
 export const registerRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/register',
-    component: RegisterPage,
+    component: lazyRouteComponent(() => import('../pages/RegisterPage')),
     beforeLoad: ({ context: { session } }) => {
-        if (session) {
+        if (!session) {
+            // we let them stay
+        } else {
             throw redirect({ to: '/chat' })
         }
     }
